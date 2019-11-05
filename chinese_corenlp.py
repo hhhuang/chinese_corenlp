@@ -106,5 +106,5 @@ class ChineseCoreNLP(object):
 
 if __name__ == "__main__":
     nlp = ChineseCoreNLP()
-    print(nlp.perform("我想聽陳曉東的歌。也想看王家衛的電影。更想修他的課。"))
+    print(nlp.perform("我想聽陳曉東的歌。也想看王家衛的電影。明天要去淡水，請幫我找相關資料。"))
 
