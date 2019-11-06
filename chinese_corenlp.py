@@ -19,7 +19,7 @@ class ChineseCoreNLP(object):
         self.traditional = traditional
     
     def build_tree(self, text, tokens):
-        text = text.strip(" ")
+        text = text.strip()
         if text[0] != '(' or text[-1] != ')':
             raise ValueError('The format of the parse tree is invalid: %s.' % text)
         text = text[1:-1].strip()
@@ -97,7 +97,12 @@ class ChineseCoreNLP(object):
         for sent in raw_results['sentences']:
             sent['tokens'] = self.build_tokens(sent['tokens'], text)
             sent['entitymentions'] = self.build_entitymentions(sent['entitymentions'], text)
-            sent['parse'] = self.build_parse_tree(sent['parse'], deque(sent['tokens']))
+            try:
+                sent['parse'] = self.build_parse_tree(sent['parse'], deque(sent['tokens']))
+            except:
+                print("Fail to build the tree: %s" % sent['parse'])
+                return None
+
             for dep_type in ["basicDependencies", "enhancedDependencies", "enhancedPlusPlusDependencies"]:
                 sent[dep_type] = self.build_dependencies(sent[dep_type], sent['tokens'])
             results.append(sent)
@@ -106,5 +111,6 @@ class ChineseCoreNLP(object):
 
 if __name__ == "__main__":
     nlp = ChineseCoreNLP()
+    print(nlp.perform("我想聽Wilhelm Furtwangler的Beethoven Symphony No. 5"))
     print(nlp.perform("我想聽陳曉東的歌。也想看王家衛的電影。明天要去淡水，請幫我找相關資料。"))
 
